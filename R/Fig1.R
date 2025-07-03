@@ -56,36 +56,6 @@ ggplot(female_count,
         axis.text.y = element_text(size = 11,color = "black"),
         legend.position = "none")
 
-#Dot plot----
-filtered_df <- ego@result[grepl("^regulation of.*metabolic process$", ego@result$Description), ]
-plotdf <- filtered_df %>% filter(pvalue<0.05,Count>=5)
-forward <- as.numeric(sub("/\\d+$", "", plotdf$GeneRatio))
-backward <- as.numeric(sub("^\\d+/", "", plotdf$GeneRatio))
-## add GeneRatio
-plotdf$GeneRatio = forward/backward
-rownames(plotdf) <- plotdf$Description
-
-library(tidyverse)
-library(viridis)
-plotdf%>% 
-  ## p value
-  arrange(-log10(pvalue)) %>% 
-  ggplot(aes(GeneRatio,forcats::fct_reorder(Description,Count)))+ 
-  geom_point(aes(color=-log10(pvalue), size = Count)) +
-  scale_color_viridis(discrete = F, option = "F")+
-  scale_x_continuous(position = "top") + 
-  scale_size_continuous(range=c(7,10))+
-  labs(y=NULL) +
-  ggtitle("")+
-  ## theme
-  theme_classic() +
-  theme(axis.text.x = element_text(colour = "black",
-                                   size = 15, vjust =1 ),
-        axis.text.y = element_text(colour = "black",
-                                   size = 15, hjust =1 ),
-        axis.title = element_text(margin=margin(10, 5, 0, 0),
-                                  color = "black",size = 15),
-        axis.title.y = element_text(angle=90))
 
 
 #GSEA plot----
